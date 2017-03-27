@@ -1,12 +1,36 @@
 body {
   font-family: 'Source Sans Pro', 'Trebuchet MS', 'Lucida Grande', 'Bitstream Vera Sans', 'Helvetica Neue', sans-serif;
-  font-size: 30px;
   margin: 0;
-  text-align: center;
-  color: #293c4b;
 }
 
-img {
-  margin: 20px 0;
-  max-width: 200px;
+.submarine .air-supply {
+  display: inline-block;
+  width: 75%;
+  background-color: #073E67;
+}
+
+.submarine .air-supply .air-pip-space {
+  display: inline-block;
+  position: relative;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  border: 2px dotted #C6DDE5;
+  margin: 0.5rem;
+}
+
+.submarine .air-supply .air-pip-space .air-pip-marker {
+  display: inline-block;
+  position: absolute;
+  left: 0.05rem;
+  top: 0.05rem;
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 50%;
+  background-color: #C20B0D;
+}
+
+.submarine .submarine-players {
+  display: inline-block;
+  width: 25%;
 }
