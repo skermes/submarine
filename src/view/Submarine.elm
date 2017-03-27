@@ -1,4 +1,4 @@
-module Submarine exposing (view)
+module View.Submarine exposing (view)
 
 import Html exposing (Html, div, span, text)
 import Html.Attributes exposing (id, class, style)

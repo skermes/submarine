@@ -7,7 +7,7 @@ import String
 
 import Msg exposing (Msg)
 import Model exposing (..)
-import Submarine
+import View.Submarine
 
 startingPlayer : String -> String -> Player
 startingPlayer color name =
@@ -48,7 +48,7 @@ view : Game -> Html Msg
 view game =
     div [ class "board" ]
         (List.concat [ List.map playerView game.players
-                     , [ Submarine.view game ]
+                     , [ View.Submarine.view game ]
                      , [ pathView game ]])
 
 subscriptions : Game -> Sub Msg
