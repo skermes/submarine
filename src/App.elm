@@ -25,7 +25,7 @@ init =
       , remainingAir = 15
       , path = [ Spot Nothing (TreasureToken 1)
                , Spot Nothing (TreasureToken 0)
-               , Spot Nothing (TreasureToken 4)
+               , Spot (Just 2) (TreasureToken 4)
                , Spot Nothing BlankToken
                , Spot Nothing (TreasureToken 10)
                , Spot Nothing (TreasureToken 15)
@@ -33,7 +33,8 @@ init =
                ]
       , inSubmarine = [0, 1]
       , players = [ startingPlayer "#D80C27" "Alice"
-                  , startingPlayer "#07387A" "Bob" ]
+                  , startingPlayer "#07387A" "Bob"
+                  , startingPlayer "#EB6317" "Charlie" ]
       }, Cmd.none )
 
 update : Msg -> Game -> ( Game, Cmd Msg )
