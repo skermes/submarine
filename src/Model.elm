@@ -9,12 +9,15 @@ type Token = BlankToken | TreasureToken Treasure
 type alias Player =
     { color : String
     , name : String
-    -- We can do it like this where 0 is in the sub, or maybe a union type of
-    -- like InSubmarine | OnPath Int ?
-    , position : Int
-    , holding : List Treasure
-    , scored : List Treasure
+    -- I would like to express here that players can only hold and score
+    -- treasure tokens, but I can't get it to recognize TreasureToken as a type.
+    , holding : List Token
+    , scored : List Token
     }
+
+type alias Spot =
+    { player : Maybe Int
+    , token : Token }
 
 -- Is there a better way to arrange this?  What if instead of having players
 -- store their position we expanded the Token type to include the player at
@@ -22,6 +25,7 @@ type alias Player =
 type alias Game =
     { airCapacity : Int
     , remainingAir : Int
-    , path : List Token
+    , path : List Spot
+    , inSubmarine : List Int
     , players : List Player
     }
