@@ -3,12 +3,8 @@ module View.Token exposing (faceUp, faceDown)
 import Html exposing (Html, div, span, text)
 import Html.Attributes exposing (id, class, style)
 
-import Model exposing (Token(..), Treasure)
+import Model exposing (Token(..), Treasure, tokenGroup)
 import Msg exposing (Msg)
-
-pips : Treasure -> Int
-pips value =
-  (value // 4) + 1
 
 blank : Html Msg
 blank =
@@ -16,7 +12,7 @@ blank =
 
 treasureUp : Int -> Html Msg
 treasureUp value =
-  div [ class ("token treasure-token token-up token-group-" ++ (toString (pips value))) ]
+  div [ class ("token treasure-token token-up token-group-" ++ (toString (tokenGroup value))) ]
       [ span [ class "token-content" ] [ text (toString value) ] ]
 
 pip : Int -> Html Msg
@@ -25,9 +21,9 @@ pip x =
 
 treasureDown : Int -> Html Msg
 treasureDown value =
-  div [ class ("token treasure-token token-down token-group-" ++ (toString (pips value))) ]
+  div [ class ("token treasure-token token-down token-group-" ++ (toString (tokenGroup value))) ]
       [ span [ class "token-content" ]
-             (List.map pip (List.range 1 (pips value)))
+             (List.map pip (List.range 1 (tokenGroup value)))
       ]
 
 faceUp : Token -> Html Msg

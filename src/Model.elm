@@ -29,3 +29,7 @@ type alias Game =
     , inSubmarine : List Int
     , players : List Player
     }
+
+tokenGroup : Treasure -> Int
+tokenGroup value =
+    (value // 4) + 1

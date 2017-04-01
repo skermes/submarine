@@ -4,8 +4,10 @@ import Html exposing (Html, text, div, img, span)
 import Html.Attributes exposing (src, class, style)
 import List
 import String
+import Random
+import Random.List exposing (shuffle)
 
-import Msg exposing (Msg)
+import Msg exposing (Msg(NoOp, NewPath))
 import Model exposing (..)
 import View.Submarine
 import View.PlayerSummary
@@ -19,27 +21,34 @@ startingPlayer color name =
     , scored = [ ]
     }
 
+startingTreasure : List Treasure
+startingTreasure =
+  [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11
+  , 12, 12, 13, 13, 14, 14, 15, 15]
+
 init : ( Game, Cmd Msg )
 init =
     ( { airCapacity = 25
-      , remainingAir = 15
-      , path = [ Spot Nothing (TreasureToken 1)
-               , Spot Nothing (TreasureToken 0)
-               , Spot (Just 2) (TreasureToken 4)
-               , Spot Nothing BlankToken
-               , Spot Nothing (TreasureToken 10)
-               , Spot Nothing (TreasureToken 15)
-               , Spot Nothing (TreasureToken 12)
-               ]
-      , inSubmarine = [0, 1]
+      , remainingAir = 25
+      , path = [ ]
+      , inSubmarine = [0, 1, 2]
       , players = [ startingPlayer "#D80C27" "Alice"
                   , startingPlayer "#07387A" "Bob"
                   , startingPlayer "#EB6317" "Charlie" ]
-      }, Cmd.none )
+      }, Random.generate NewPath (shuffle startingTreasure) )
+
+shuffledTreasureToPath : (List Treasure) -> (List Spot)
+shuffledTreasureToPath treasure =
+  treasure
+    |> List.sortBy (\t -> tokenGroup t)
+    |> List.map (\t -> (Spot Nothing (TreasureToken t)))
 
 update : Msg -> Game -> ( Game, Cmd Msg )
 update msg game =
-    ( game, Cmd.none )
+    case msg of
+      NoOp -> ( game, Cmd.none )
+      NewPath shuffledTreasure -> ( { game | path = (shuffledTreasureToPath shuffledTreasure) }
+                                  , Cmd.none )
 
 pathView : Game -> Html Msg
 pathView game =
