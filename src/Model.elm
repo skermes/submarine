@@ -6,6 +6,8 @@ type alias Treasure = Int
 -- | List Treasure on seems a little to simplistic?
 type Token = BlankToken | TreasureToken Treasure
 
+type Position = InSubmarine | OnPath Int
+
 type alias Player =
     { color : String
     , name : String
@@ -13,15 +15,13 @@ type alias Player =
     -- treasure tokens, but I can't get it to recognize TreasureToken as a type.
     , holding : List Token
     , scored : List Token
+    , position : Position
     }
 
 type alias Spot =
     { player : Maybe Int
     , token : Token }
 
--- Is there a better way to arrange this?  What if instead of having players
--- store their position we expanded the Token type to include the player at
--- that position?
 type alias Game =
     { airCapacity : Int
     , remainingAir : Int

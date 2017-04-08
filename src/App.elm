@@ -19,6 +19,7 @@ startingPlayer color name =
     , name = name
     , holding = [ ]
     , scored = [ ]
+    , position = InSubmarine
     }
 
 startingTreasure : List Treasure
