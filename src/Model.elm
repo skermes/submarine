@@ -28,6 +28,7 @@ type alias Game =
     , path : List Spot
     , inSubmarine : List Int
     , players : List Player
+    , activePlayer : Int
     }
 
 tokenGroup : Treasure -> Int

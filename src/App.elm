@@ -35,6 +35,7 @@ init =
       , players = [ startingPlayer "#D80C27" "Alice"
                   , startingPlayer "#07387A" "Bob"
                   , startingPlayer "#EB6317" "Charlie" ]
+      , activePlayer = 0
       }, Random.generate NewPath (shuffle startingTreasure) )
 
 shuffledTreasureToPath : (List Treasure) -> (List Spot)
