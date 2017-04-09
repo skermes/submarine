@@ -8,6 +8,8 @@ type Token = BlankToken | TreasureToken Treasure
 
 type Position = InSubmarine | OnPath Int
 
+type Direction = TowardsSub | AwayFromSub
+
 type alias Player =
     { color : String
     , name : String
@@ -29,6 +31,7 @@ type alias Game =
     , inSubmarine : List Int
     , players : List Player
     , activePlayer : Int
+    , lastDieRoll : Maybe Int
     }
 
 tokenGroup : Treasure -> Int

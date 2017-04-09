@@ -6,12 +6,14 @@ import List
 import String
 import Random
 import Random.List exposing (shuffle)
+import Array exposing (Array)
 
-import Msg exposing (Msg(NoOp, NewPath))
+import Msg exposing (..)
 import Model exposing (..)
 import View.Submarine
 import View.PlayerSummary
 import View.Path
+import View.Actions
 
 startingPlayer : String -> String -> Player
 startingPlayer color name =
@@ -37,6 +39,7 @@ init =
                   , startingPlayer "#07387A" "Bob"
                   , startingPlayer "#EB6317" "Charlie" ]
       , activePlayer = 0
+      , lastDieRoll = Nothing
       }, Random.generate NewPath (shuffle startingTreasure) )
 
 shuffledTreasureToPath : (List Treasure) -> (List Spot)
@@ -45,12 +48,44 @@ shuffledTreasureToPath treasure =
     |> List.sortBy (\t -> tokenGroup t)
     |> List.map (\t -> (Spot Nothing (TreasureToken t)))
 
+movePlayer : Position -> Direction -> Int -> (Array Spot) -> Position
+movePlayer position direction distance path =
+  if distance <= 0 then
+    position
+  else
+    case position of
+      InSubmarine ->
+        case direction of
+          TowardsSub -> position
+          AwayFromSub ->
+            case (Array.get 0 path) of
+              Nothing -> position
+              Just spot ->
+                case spot.player of
+                  Nothing -> movePlayer (OnPath 0) direction (distance - 1) path
+                  Just _ -> movePlayer (OnPath 0) direction distance path
+      OnPath idx ->
+        let offset = (if direction == TowardsSub then -1 else 1)
+        in
+          case (Array.get (idx + offset) path) of
+            Nothing ->
+              case direction of
+                TowardsSub -> InSubmarine
+                AwayFromSub -> position
+            Just spot ->
+              case spot.player of
+                Nothing -> movePlayer (OnPath (idx + offset)) direction (distance - 1) path
+                Just _ -> movePlayer (OnPath (idx + offset)) direction distance path
+
 update : Msg -> Game -> ( Game, Cmd Msg )
 update msg game =
     case msg of
       NoOp -> ( game, Cmd.none )
       NewPath shuffledTreasure -> ( { game | path = (shuffledTreasureToPath shuffledTreasure) }
                                   , Cmd.none )
+      Roll -> ( game, Random.generate NewRoll (Random.pair (Random.int 1 3) (Random.int 1 3)) )
+      NewRoll (x, y) -> ( { game | lastDieRoll = (Just (x + y)) }
+                        , Cmd.none )
 
 pathView : Game -> Html Msg
 pathView game =
@@ -62,7 +97,9 @@ view game =
     div [ class "board" ]
         (List.concat [ List.map View.PlayerSummary.view game.players
                      , [ View.Submarine.view game ]
-                     , [ View.Path.view game.path game.players ]])
+                     , [ View.Path.view game.path game.players ]
+                     , [ View.Actions.view game ]
+                     ])
 
 subscriptions : Game -> Sub Msg
 subscriptions game =
